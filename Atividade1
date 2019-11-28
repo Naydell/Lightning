@@ -1,0 +1,205 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//Sistema para cadastramento de veiculos
+
+int main()
+{
+    struct veiculos
+    {
+        char marca[20];
+        char modelo[20];
+        int anoFabricacao;
+        char placa[20];
+    }sistema[9];
+
+    // "sistema" é o nome da estrutura
+
+    printf(":: Sistema para Cadastramento de Veiculos ::\n");
+    int i = 0, IDdoVeiculo = 0, CadastrarSimouNao = 1, opcao = 1;
+    while(opcao != 0)
+    {
+        printf("\n=== Escolha uma opcao === \n");
+        printf("[ 1 ] Cadastrar novo veiculo\n");
+        printf("[ 2 ] Listar veiculos cadastrados\n");
+        printf("[ 3 ] Filtrar por ano de fabricacao\n");
+        printf("[ 4 ] Filtrar veiculos com ano de fabricacao acima de um valor especificado\n");
+        printf("[ 5 ] Filtrar por modelo\n");
+        printf("[ 0 ] Finalizar o programa");
+        printf("\n\nDigite o numero correspondente: ");
+            scanf("%d", &opcao);
+            setbuf(stdin,NULL);
+            printf("\n");
+            system("cls");
+
+        // Cadastro de novo veiculos
+        if(opcao == 1)
+        {
+            if(CadastrarSimouNao == 1)
+            {
+                printf("=== Cadastro de veiculos ===\n\n");
+                for(i = 0; i < 9; i++) //No máximo 10 veiculos como solicitado no enunciado
+                {
+                    printf("Veiculo N.%d\n", i+1);
+                    printf("Informe a marca: ");
+                        gets(sistema[i].marca);
+                    printf("Informe o modelo: ");
+                        gets(sistema[i].modelo);
+                    printf("Informe o ano de fabricao: ");
+                    scanf("%d", &sistema[i].anoFabricacao);
+                        setbuf(stdin,NULL);
+                    printf("Informe a placa(formato ABC-1234): ");
+                        gets(sistema[i].placa);
+                    printf("\n");
+                    printf("Cadastrar novo veiculo? [1-Sim / 0-Nao] ");
+                        scanf("%i", &CadastrarSimouNao);
+                        setbuf(stdin,NULL);
+                    IDdoVeiculo += 1;
+                    printf("\n");
+                    if(CadastrarSimouNao == 0)
+                    {
+                        break;
+                        IDdoVeiculo += 1;
+                    }
+                }
+            }
+            CadastrarSimouNao = 1;
+            system("cls");
+        }
+
+
+        //Organizar veiculos por ano de fabricacao em ordem crescente
+        int x = 0, y = 0, auxiliar = 0; //As variaveis x e y servem para organizar as demais
+        char auxMarca[20], auxModelo[20], auxPlaca[20];
+        for(x = 0; x < IDdoVeiculo; x++)
+        {
+            for(y = x; y < IDdoVeiculo; y++)
+            {
+                if(sistema[x].anoFabricacao > sistema[y].anoFabricacao)
+                {
+                    auxiliar = sistema[x].anoFabricacao;
+                    sistema[x].anoFabricacao = sistema[y].anoFabricacao;
+                    sistema[y].anoFabricacao = auxiliar;
+
+                    strcpy(auxMarca, sistema[x].marca);
+                    strcpy(sistema[x].marca, sistema[y].marca);
+                    strcpy(sistema[y].marca, auxMarca);
+
+                    strcpy(auxModelo, sistema[x].modelo);
+                    strcpy(sistema[x].modelo, sistema[y].modelo);
+                    strcpy(sistema[y].modelo, auxModelo);
+
+                    strcpy(auxPlaca, sistema[x].placa);
+                    strcpy(sistema[x].placa, sistema[y].placa);
+                    strcpy(sistema[y].placa, auxPlaca);
+                }
+            }
+        }
+
+        // Listar veiculos cadastrados
+        if(opcao == 2)
+        {
+            printf("=== Veiculos cadastrados ===\n\n");
+            for(i = 0; i < IDdoVeiculo; i++)
+            {
+                printf("\n");
+                printf("Veiculo N.%d\n", i+1);
+                printf("Marca: %s\n", sistema[i].marca);
+                printf("Modelo: %s\n", sistema[i].modelo);
+                printf("Ano de fabricacao: %d\n", sistema[i].anoFabricacao);
+                printf("Placa: %s\n", sistema[i].placa);
+            }
+        }
+
+        //Filtra por apo de fabricacao
+        if(opcao == 3)
+        {
+
+            int i = 0, listaAnoFabricacao;
+            printf("\n:: Filtro por ano de fabricacao ::\n");
+            printf("\nDigite o ano de fabricacao: ");
+                scanf("%i", &listaAnoFabricacao);
+                setbuf(stdin,NULL);
+                system("cls");
+            printf("=== Veiculos fabricados em %d ===\n\n", listaAnoFabricacao);
+            for(i = 0; i < IDdoVeiculo; i++)
+            {
+                if(listaAnoFabricacao == sistema[i].anoFabricacao)
+                {
+                    printf("Veiculo N.%d\n", i+1);
+                    printf("Marca: %s\n", sistema[i].marca);
+                    printf("Modelo: %s\n", sistema[i].modelo);
+                    printf("Ano de fabricacao: %d\n", sistema[i].anoFabricacao);
+                    printf("Placa: %s\n", sistema[i].placa);
+                }
+            }
+        }
+
+        //Listar veiculos com ano de fabricacao acima de um valor especificado
+        if(opcao == 4)
+        {
+            int i = 0, listaAcimaAnoFabricacao;
+            printf("\n:: Filtro por ano de fabricacao acima de um valor especificado ::\n");
+            printf("\nDigite o ano: ");
+                scanf("%i", &listaAcimaAnoFabricacao);
+                setbuf(stdin,NULL);
+                system("cls");
+            printf("=== Veiculos fabricados apos %d ===\n\n", listaAcimaAnoFabricacao);
+            for(i = 0; i < IDdoVeiculo; i++)
+            {
+                if(listaAcimaAnoFabricacao < sistema[i].anoFabricacao)
+                {
+                    printf("Veiculo N.%d\n", i+1);
+                    printf("Marca: %s\n", sistema[i].marca);
+                    printf("Modelo: %s\n", sistema[i].modelo);
+                    printf("Ano de fabricacao: %d\n", sistema[i].anoFabricacao);
+                    printf("Placa: %s\n\n", sistema[i].placa);
+                }
+            }
+        }
+
+        //Listar veiculos por modelo
+        if(opcao == 5)
+        {
+            int i = 0, compararModeloSolicitado, compararModeloAnteriorDepois;
+            char listaModelo[20];
+            printf("\n:: Filtro modelo ::\n");
+            printf("\nDigite o modelo: ");
+                gets(listaModelo);
+                setbuf(stdin, NULL);
+                system("cls");
+
+            compararModeloSolicitado = strcmp(listaModelo,sistema[i].modelo);
+
+            printf("=== Veiculos do modelo %s\n\n", listaModelo);
+            for(i = 0; i < IDdoVeiculo; i++)
+            {
+                if(compararModeloSolicitado == 0)
+                {
+                    compararModeloAnteriorDepois = strcmp(sistema[i].modelo,sistema[i+1].modelo);
+                    if(compararModeloAnteriorDepois == 0);
+                    {
+                        printf("Veiculo N.%d\n", i+1);
+                        printf("Marca: %s\n", sistema[i].marca);
+                        printf("Modelo: %s\n", sistema[i].modelo);
+                        printf("Ano de fabricacao: %d\n", sistema[i].anoFabricacao);
+                        printf("Placa: %s\n", sistema[i].placa);
+                    }
+                    if(compararModeloAnteriorDepois != 0)
+                    {
+                        break;
+                    }
+                }
+
+                if(compararModeloSolicitado != 0)
+                {
+                    printf("Veiculo nao encontrado\n");
+                    break;
+                }
+
+            }
+        }
+    }
+return 0;
+}
